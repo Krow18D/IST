@@ -1,0 +1,15 @@
+en
+conf t
+hostname OUTSIDE-ROUTER
+int s0/0/0
+ip add 161.246.5.126 255.255.255.128
+clock rate 56000
+no shut
+int gi0/0
+ip add 15.15.15.1 255.0.0.0
+no shut
+int gi0/1
+ip add 20.20.20.1 255.0.0.0
+no shut
+exit
+ip route 161.246.5.0 255.255.255.0 161.246.5.1

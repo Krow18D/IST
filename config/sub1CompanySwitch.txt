@@ -1,0 +1,11 @@
+en
+conf t
+hostname SUB1-COMPANY-SWITCH
+vtp version 2
+vtp domain sub1
+vtp password 1234
+vtp mode tran
+int f0/24
+sw m t
+int ran f0/1-2
+sw m t

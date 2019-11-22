@@ -1,0 +1,162 @@
+en
+conf t
+hostname MAIN-COMPANY-ROUTER
+int gi0/0
+no shut
+int gi0/0.10
+encap dot 10
+ip add 192.168.1.1 255.255.255.224
+int gi0/0.20
+encap dot 20
+ip add 192.168.1.33 255.255.255.224
+int gi0/0.30
+encap dot 30
+ip add 192.168.1.65 255.255.255.224
+int gi0/0.40
+encap dot 40
+ip add 192.168.1.97 255.255.255.224
+int gi0/0.50
+encap dot 50
+ip add 192.168.1.129 255.255.255.240
+exit
+ip dhcp exclude 192.168.1.1 192.168.1.2
+ip dhcp exclude 192.168.1.33 192.168.1.34
+ip dhcp exclude 192.168.1.65 192.168.1.66
+ip dhcp exclude 192.168.1.97 192.168.1.98
+ip dhcp exclude 192.168.1.129 192.168.1.130
+ip dhcp pool ManageV10
+network 192.168.1.0 255.255.255.224
+default-router 192.168.1.1
+dns-server 192.168.1.130
+exit
+ip dhcp pool AcoountV20
+network 192.168.1.32 255.255.255.224
+default-router 192.168.1.33
+dns-server 192.168.1.130
+exit
+ip dhcp pool HRV30
+network 192.168.1.64 255.255.255.224
+default-router 192.168.1.65
+dns-server 192.168.1.130
+exit
+ip dhcp pool EngineerV40
+network 192.168.1.96 255.255.255.224
+default-router 192.168.1.97
+dns-server 192.168.1.130
+exit
+ip dhcp pool ITV50
+network 192.168.1.128 255.255.255.240
+default-router 192.168.1.129
+dns-server 192.168.1.130
+end
+conf t
+int s0/0/0
+ip add 161.246.3.1 255.255.255.252
+no shut
+int s0/0/1
+ip add 161.246.4.1 255.255.255.252
+no shut
+int s0/1/0
+ip add 161.246.5.1 255.255.255.252
+no shut
+exit
+ip route 0.0.0.0 0.0.0.0 S0/1/0
+ip route 172.16.1.0 255.255.255.224 161.246.3.2
+ip route 172.16.2.0 255.255.255.224 161.246.3.2
+ip route 165.248.5.0 255.255.255.240 161.246.4.2
+ip route 165.248.6.0 255.255.255.240 161.246.4.2
+ip route 144.144.144.0 255.255.255.252 161.246.4.2
+ip route 155.155.155.0 255.255.255.252 161.246.4.2
+ip route 166.166.166.0 255.255.255.252 161.246.4.2
+int s0/1/0
+ip add 161.246.5.1 255.255.255.128
+no shut
+exit
+ip nat pool MAN 161.246.5.2 161.246.5.26 netmask 255.255.255.128
+access-list 1 permit 192.168.1.0 0.0.0.31
+ip nat inside source list 1 pool MAN overload
+
+ip nat pool ACC 161.246.5.27 161.246.5.51 netmask 255.255.255.128
+access-list 2 permit 192.168.1.32 0.0.0.31
+ip nat inside source list 2 pool ACC overload
+ip nat pool HR 161.246.5.52 161.246.5.76 netmask 255.255.255.128
+access-list 3 permit 192.168.1.64 0.0.0.31
+ip nat inside source list 3 pool HR overload
+ip nat pool ENG 161.246.5.77 161.246.5.101 netmask 255.255.255.128
+access-list 4 permit 192.168.1.96 0.0.0.31
+ip nat inside source list 4 pool ENG overload
+ip nat pool IT 161.246.5.102 161.246.5.111 netmask 255.255.255.128
+access-list 5 permit 192.168.1.128 0.0.0.31
+ip nat inside source list 5 pool IT overload
+
+ip nat pool MAK 161.246.5.129 161.246.5.148 netmask 255.255.255.128
+access-list 6 permit 172.16.1.0 0.0.0.15
+access-list 6 permit 172.16.2.0 0.0.0.15
+ip nat inside source list 6 pool MAK overload
+
+ip nat pool DES 161.246.5.149 161.246.5.168 netmask 255.255.255.128
+access-list 7 permit 172.16.1.16 0.0.0.15
+access-list 7 permit 172.16.2.16 0.0.0.15
+ip nat inside source list 7 pool DES overload
+
+int gi0/0
+ip nat inside
+int gi0/0.10
+ip nat inside
+int gi0/0.20
+ip nat inside
+int gi0/0.30
+ip nat inside
+int gi0/0.40
+ip nat inside
+int gi0/0.50
+ip nat inside
+int s0/0/0
+ip nat inside
+int s0/1/0
+ip nat outside
+end
+conf t
+access-list 1 permit host 192.168.1.130
+access-list 1 permit 192.168.1.0 0.0.0.31
+access-list 1 permit 172.16.1.0 0.0.0.15
+access-list 1 permit host 15.15.15.15
+access-list 1 permit host 20.20.20.20 
+access-list 1 deny any
+int gi0/0.10
+ip access-group 1 out
+exit
+access-list 2 permit host 192.168.1.130
+access-list 2 permit 192.168.1.32 0.0.0.31
+access-list 2 permit host 15.15.15.15
+access-list 2 permit host 20.20.20.20
+access-list 2 deny any
+int gi0/0.20
+ip access-group 2 out
+exit
+access-list 3 permit host 192.168.1.130
+access-list 3 permit 192.168.1.64 0.0.0.31
+access-list 3 permit host 15.15.15.15
+access-list 3 permit host 20.20.20.20
+access-list 3 deny any
+int gi0/0.30
+ip access-group 3 out
+exit
+access-list 1 permit host 192.168.1.130
+access-list 4 permit 192.168.1.96 0.0.0.31
+access-list 4 permit 172.16.1.16 0.0.0.15
+access-list 4 permit 172.16.2.16 0.0.0.15
+access-list 4 permit 165.248.5.1 0.0.0.15
+access-list 4 permit 165.248.6.1 0.0.0.15
+access-list 4 permit host 15.15.15.15
+access-list 4 permit host 20.20.20.20
+access-list 4 deny any
+int gi0/0.40
+ip access-group 4 out
+exit
+access-list 5 permit 192.168.1.0 0.0.0.255
+access-list 5 permit host 15.15.15.15
+access-list 5 permit host 20.20.20.20
+int gi0/0.50
+ip access-group 5 out
+exit

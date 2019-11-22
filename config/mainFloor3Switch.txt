@@ -1,0 +1,41 @@
+en
+conf t
+hostname FLOOR3-SWITCH
+int f0/24
+sw m t
+vtp version 2
+vtp mode server
+vtp domain main
+vtp password krxw1234
+
+vlan 10
+name MANAGE
+vlan 20
+name ACCOUNT
+vlan 30
+name HR
+vlan 40
+name ENGINEER
+vlan 50
+name IT-SUPPORT
+exit
+int range f0/1-5
+sw m ac
+sw ac vlan 10
+exit
+int range f0/6-10
+sw m ac
+sw ac vlan 20
+exit
+int range f0/11-15
+sw m ac
+sw ac vlan 30
+exit
+int range f0/16-20
+sw m ac
+sw ac vlan 40
+exit
+int range f0/21-22
+sw m ac
+sw ac vlan 50
+end

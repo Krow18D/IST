@@ -1,0 +1,9 @@
+en
+conf t
+hostname FLOOR6-SWITCH
+int f0/24
+sw m t
+vtp version 2
+vtp mode cli
+vtp domain main
+vtp password krxw1234

@@ -1,0 +1,57 @@
+en
+conf t
+hostname SUB-COMPANY2-ROUTER
+int gi0/0
+no shut
+int gi0/0.60
+encap dot 60
+ip add 172.16.2.1 255.255.255.240
+int gi0/0.70
+encap dot 70
+ip add 172.16.2.17 255.255.255.240
+end
+conf t
+ip dhcp exclude 172.16.2.1
+ip dhcp exclude 172.16.2.17
+ip dhcp exclude 172.16.2.28
+ip dhcp pool MarketV60
+network 172.16.2.0 255.255.255.240
+default-router 172.16.2.1
+dns-server 8.8.8.9
+ip dhcp pool DesignV70
+network 172.16.2.16 255.255.255.240
+default-router 172.16.2.17
+dns-server 8.8.8.9
+end
+conf t
+int s0/0/1
+ip add 172.16.100.2 255.255.255.252
+clock rate 56000
+no shut
+int s0/0/0
+ip add 172.16.200.2 255.255.255.252
+clock rate 56000
+no shut
+router eigrp 18
+network 172.16.0.0
+no auto-summary
+passive-int gi0/0
+exit
+access-list 1 permit 172.16.1.0 0.0.0.15
+access-list 1 deny 192.168.1.2 
+access-list 1 permit 192.168.1.0 0.0.0.31
+access-list 1 permit host 15.15.15.15
+access-list 1 permit host 20.20.20.20 
+access-list 1 permit host 8.8.8.9
+access-list 1 deny any
+access-list 2 permit 172.16.1.16 0.0.0.15
+access-list 2 deny host 192.168.1.98
+access-list 2 permit 192.168.1.96 0.0.0.31
+access-list 2 permit host 15.15.15.15
+access-list 2 permit host 20.20.20.20
+access-list 2 permit host 8.8.8.9
+access-list 2 deny any
+int g0/0.60
+ip access-group 1 out
+int g0/0.70
+ip access-group 2 out

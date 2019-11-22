@@ -1,0 +1,35 @@
+en
+conf t
+hostname FACTORY2-ROUTER
+int s0/0/0
+ip add 155.155.155.2 255.255.255.252
+clock rate 56000
+no shut
+int s0/0/1
+ip add 166.166.166.1 255.255.255.252
+no shut
+int gi0/0
+ip add 165.248.5.1 255.255.255.240
+no shut
+exit
+router rip
+version 2
+network 165.248.5.0
+network 155.155.0.0
+network 166.166.0.0
+no auto
+passive-int gi0/0
+end
+conf t
+ip dhcp exclude 165.248.5.1
+ip dhcp pool FAC1
+network 165.248.5.0 255.255.255.240
+default-router 165.248.5.1
+end
+conf t
+access-list 1 deny host 192.168.1.98
+access-list 1 permit 192.168.1.97 0.0.0.31
+access-list 1 permit 165.248.6.0 0.0.0.15
+access-list 1 deny any
+int gi0/0 
+ip access-group 1 out

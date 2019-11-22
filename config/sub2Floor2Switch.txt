@@ -1,0 +1,22 @@
+en 
+conf t
+hostname SUB1-FLOOR2-SWITCH
+vtp version 2
+vtp domain sub2
+vtp password 1234
+vtp mode server
+vlan 60 
+name MARKETING
+vlan 70 
+name DESIGNER
+int ran f0/1-5
+sw m ac
+sw ac vlan 60
+int ran f0/23
+sw m ac
+sw ac vlan 70
+int ran f0/6-10
+sw m ac
+sw ac vlan 70
+int f0/24
+sw m t

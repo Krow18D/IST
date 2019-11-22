@@ -1,0 +1,15 @@
+en 
+conf t
+hostname SUB1-FLOOR1
+vtp version 2
+vtp domain sub1
+vtp password 1234
+vtp mode client
+int ran f0/1-5
+sw m ac
+sw ac vlan 60
+int ran f0/6-10
+sw m ac
+sw ac vlan 70
+int f0/24
+sw m t

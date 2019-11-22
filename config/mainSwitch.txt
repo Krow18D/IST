@@ -1,0 +1,11 @@
+en
+conf t
+hostname MAIN-SWITCH
+int f0/24
+sw m t
+int range fa0/1-6
+sw m t
+vtp version 2
+vtp mode tran
+vtp domain main
+vtp password krxw1234

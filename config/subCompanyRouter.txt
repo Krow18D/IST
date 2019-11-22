@@ -1,0 +1,22 @@
+en
+conf t
+hostname SUB-COMPANY-ROUTER
+int gi0/0
+ip add 8.8.8.10 255.255.255.252
+no shut
+int s0/0/1
+ip add 172.16.50.1 255.255.255.252
+no shut
+int s0/1/0
+ip add 172.16.200.1 255.255.255.252
+no shut
+int s0/0/0
+ip add 161.246.3.2 255.255.255.252
+clock rate 56000
+no shut
+exit
+ip route 0.0.0.0 0.0.0.0 s0/0/0
+router eigrp 18
+network 172.16.0.0
+network 8.0.0.0
+no auto-summary
